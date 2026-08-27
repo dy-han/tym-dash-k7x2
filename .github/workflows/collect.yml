@@ -1,0 +1,34 @@
+name: 데이터 수집
+
+on:
+  schedule:
+    - cron: "30 14 * * *"   # 매일 23:30 KST (지연 대비 1차)
+    - cron: "55 14 * * *"   # 매일 23:55 KST (건너뜀 대비 2차 — 같은 날 재실행 안전)
+  workflow_dispatch: {}      # 수동 실행 버튼
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 수집 실행
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          TZ: Asia/Seoul
+        run: python3 collector.py
+
+      - name: data.json 커밋
+        run: |
+          git config user.name "tym-collector"
+          git config user.email "actions@users.noreply.github.com"
+          git add data.json
+          git diff --cached --quiet && echo "변경 없음" || git commit -m "data: $(TZ=Asia/Seoul date +%F)"
+          git push
