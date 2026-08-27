@@ -215,7 +215,7 @@ details.tbl table{font-size:12px}
       <h3>일 방문자 추이</h3>
       <div class="legend">
         <span><i style="background:var(--red)"></i>일 방문자</span>
-        <span><i style="background:var(--blue)"></i>7일 평균</span>
+        <span id="lgAvg"><i style="background:var(--blue)"></i>7일 평균</span>
       </div>
       <div id="chVisit"></div>
       <details class="tbl"><summary>표로 보기</summary><div id="tbVisit"></div></details>
@@ -416,7 +416,7 @@ function render(data){
     const vL = V[V.length-1].v;
     const vA = Math.round(V.slice(-7).reduce((a,b)=>a+b.v,0) / Math.min(7, V.length));
     $("tVisit").textContent = fmt(vL);
-    $("tVisitSub").textContent = `최근 7일 평균 ${fmt(vA)}명/일`;
+    $("tVisitSub").textContent = V.length >= 7 ? `최근 7일 평균 ${fmt(vA)}명/일` : "";
     $("tPosts").textContent = `${I.monthlyPosts + N.monthlyPosts}건`;
   }
 
@@ -445,15 +445,18 @@ function render(data){
   const vLast = V[V.length-1].v;
   const v7 = Math.round(V.slice(-7).reduce((a,b)=>a+b.v,0) / Math.min(7, V.length));
   $("nVisit").textContent = fmt(vLast);
-  $("nVisitSub").textContent = `최근 7일 평균 ${fmt(v7)}명/일`;
+  $("nVisitSub").textContent = V.length >= 7 ? `최근 7일 평균 ${fmt(v7)}명/일` : "";
   $("nSub").textContent = fmt(N.subscribers);
   $("nPosts").textContent = `${N.monthlyPosts}건`;
   const v30 = V.slice(-30);
-  const avg = movAvg(V, 7).slice(-30).map((v,i)=>({d:v30[i].d, v}));
-  lineChart($("chVisit"), [
-    {name:"일 방문자", color:"#E60012", data:v30},
-    {name:"7일 평균", color:"#2F5FA8", data:avg, dashed:true}
-  ]);
+  const vSeries = [{name:"일 방문자", color:"#E60012", data:v30}];
+  if (V.length >= 7) {
+    const avg = movAvg(V, 7).slice(-30).map((v,i)=>({d:v30[i].d, v}));
+    vSeries.push({name:"7일 평균", color:"#2F5FA8", data:avg, dashed:true});
+  } else {
+    $("lgAvg").style.display = "none";
+  }
+  lineChart($("chVisit"), vSeries);
   tableFrom($("tbVisit"), ["날짜","방문자"], V.slice(-14).reverse().map(p=>[p.d, fmt(p.v)]));
 
   $("nRecent").innerHTML = N.recent.map(r=>`
