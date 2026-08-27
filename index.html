@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TYM 채널 성과</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#F6F4F1; --card:#FFFFFF; --ink:#1D1B19; --sub:#6E6862; --line:#E7E2DC;
+  --red:#E60012; --blue:#2F5FA8; --naver:#03A94E; --well:#FAF8F6;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html{color-scheme:light}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,"Malgun Gothic",sans-serif;
+  font-size:15px; line-height:1.5;
+}
+.wrap{max-width:760px; margin:0 auto; padding:0 14px 48px}
+header{padding:22px 2px 6px}
+header h1{margin:0; font-size:20px; font-weight:900; letter-spacing:-.3px}
+header h1 b{color:var(--red)}
+.upd{margin-top:3px; font-size:12px; color:var(--sub)}
+.badge-sample{
+  display:none; margin-top:6px; font-size:11px; color:#8a5a00;
+  background:#FFF3D6; border:1px solid #F0DFAE; border-radius:6px; padding:2px 8px; width:fit-content;
+}
+/* 채널 섹션 */
+.ch{margin-top:22px; border-radius:18px; padding:16px 14px 18px; background:#FBFAF8; border:1px solid var(--line)}
+.ch.total{border-top:4px solid var(--ink)}
+.ch.total .ch-badge{background:#EDEAE6; color:var(--ink)}
+.ch.insta{border-top:4px solid var(--red)}
+.ch.naver{border-top:4px solid var(--naver)}
+.ch-head{display:flex; align-items:center; gap:9px; margin:2px 2px 12px}
+.ch-badge{font-size:12px; font-weight:900; border-radius:8px; padding:4px 10px; letter-spacing:.2px}
+.ch.insta .ch-badge{background:#FDEBEC; color:var(--red)}
+.ch.naver .ch-badge{background:#E7F7EE; color:#028A40}
+.ch-head h2{margin:0; font-size:16px; font-weight:900; letter-spacing:-.2px}
+.ch-head .acct{margin-left:auto; font-size:11.5px; color:var(--sub)}
+.cards{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:13px 15px}
+.k-label{font-size:12px; font-weight:500; color:var(--sub)}
+.k-value{font-size:27px; font-weight:900; letter-spacing:-.5px; line-height:1.15; margin-top:2px; font-variant-numeric:tabular-nums}
+.k-sub{font-size:12px; color:var(--sub); margin-top:2px; font-variant-numeric:tabular-nums}
+.k-sub .up{color:var(--red); font-weight:700}
+.chart-card{margin-top:10px; padding:15px 15px 8px}
+.chart-card h3{margin:0 0 2px; font-size:14px; font-weight:700}
+.chart-card .cap{font-size:12px; color:var(--sub); margin:0 0 6px}
+.legend{display:flex; gap:14px; font-size:12px; color:var(--sub); margin:2px 0 4px}
+.legend i{display:inline-block; width:14px; height:3px; border-radius:2px; margin-right:5px; vertical-align:middle}
+svg{display:block; width:100%; height:auto; touch-action:pan-y}
+.tip{
+  position:fixed; pointer-events:none; z-index:9; background:#26221F; color:#fff;
+  font-size:12px; padding:6px 9px; border-radius:8px; opacity:0; transition:opacity .1s;
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.sub-sect{margin-top:14px}
+.sub-sect h3{font-size:13.5px; font-weight:700; margin:0 0 3px}
+.sub-sect .cap{font-size:12px; color:var(--sub); margin:0 0 8px}
+table{width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; font-size:13px}
+th{font-size:12px; font-weight:700; color:var(--sub); text-align:left; padding:8px 12px; background:var(--well); border-bottom:1px solid var(--line)}
+td{padding:8px 12px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+td.num, th.num{text-align:right}
+.rank1{color:var(--naver); font-weight:900}
+.delta-up{color:var(--naver); font-size:11px; font-weight:700}
+.delta-same{color:var(--sub); font-size:11px}
+.bars{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 15px 8px}
+.bar-row{display:grid; grid-template-columns:44px 1fr 52px; align-items:center; gap:10px; margin:8px 0}
+.bar-row .nm{font-size:13px; font-weight:500}
+.bar-row .tr{display:block; background:var(--well); border-radius:5px; height:20px; overflow:hidden}
+.bar-row .fl{display:block; background:var(--red); border-radius:4px; height:20px; min-width:4px}
+.bar-row .vl{font-size:13px; font-weight:700; text-align:right; font-variant-numeric:tabular-nums}
+.list{background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden}
+.li{display:flex; align-items:center; gap:10px; padding:10px 13px; border-bottom:1px solid var(--line); font-size:13px}
+.li:last-child{border-bottom:0}
+.li .t{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.li .d{flex:0 0 auto; color:var(--sub); font-size:12px; font-variant-numeric:tabular-nums}
+.li .v{flex:0 0 auto; font-weight:700; font-variant-numeric:tabular-nums}
+.medal{flex:0 0 20px; text-align:center; font-weight:900; color:var(--sub)}
+.medal.m1{color:var(--red)}
+#gate{position:fixed; inset:0; background:var(--bg); z-index:99; display:flex; align-items:center; justify-content:center; padding:20px}
+#gate .g-card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px 24px; width:100%; max-width:320px; text-align:center}
+#gate h2{margin:0 0 4px; font-size:17px; font-weight:900}
+#gate h2 b{color:var(--red)}
+#gate p{margin:0 0 14px; font-size:12.5px; color:var(--sub)}
+#gate input{width:100%; font-family:inherit; font-size:16px; text-align:center; padding:10px; border:1px solid var(--line); border-radius:10px; letter-spacing:2px}
+#gate button{width:100%; margin-top:10px; font-family:inherit; font-size:14px; font-weight:700; padding:10px; border:0; border-radius:10px; background:var(--red); color:#fff; cursor:pointer}
+#gate .g-err{color:var(--red); font-size:12px; margin-top:8px; min-height:16px}
+footer{margin-top:26px; font-size:11.5px; color:var(--sub); line-height:1.65}
+details.tbl{margin:4px 0 8px}
+details.tbl summary{font-size:12px; color:var(--sub); cursor:pointer; padding:4px 0}
+details.tbl table{font-size:12px}
+@media (min-width:640px){
+  .cards{grid-template-columns:1fr 1fr 1fr}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+}
+</style>
+</head>
+<body>
+<div id="gate" style="display:none">
+  <div class="g-card">
+    <h2><b>TYM</b> 채널 성과</h2>
+    <p>접근 코드를 입력하세요</p>
+    <input id="gCode" type="password" inputmode="text" autocomplete="off">
+    <button id="gBtn">확인</button>
+    <div class="g-err" id="gErr"></div>
+  </div>
+</div>
+<div class="wrap" id="app" style="visibility:hidden">
+  <header>
+    <h1><b>TYM</b> 채널 성과</h1>
+    <div class="upd" id="upd">불러오는 중…</div>
+    <div class="badge-sample" id="sampleBadge">샘플 데이터 표시 중 — 수집 시작 시 실데이터로 교체됩니다</div>
+  </header>
+
+  <!-- ================= 전체 요약 ================= -->
+  <section class="ch total">
+    <div class="ch-head">
+      <span class="ch-badge">TOTAL</span>
+      <h2>전체 요약</h2>
+      <span class="acct">인스타그램 + 네이버 블로그</span>
+    </div>
+    <div class="cards" style="grid-template-columns:1fr 1fr">
+      <div class="card">
+        <div class="k-label">인스타그램 팔로워</div>
+        <div class="k-value" id="tFollow">–</div>
+        <div class="k-sub" id="tFollowSub"></div>
+      </div>
+      <div class="card">
+        <div class="k-label">네이버 블로그 일 방문자</div>
+        <div class="k-value" id="tVisit">–</div>
+        <div class="k-sub" id="tVisitSub"></div>
+      </div>
+      <div class="card">
+        <div class="k-label">이달 발행 합계</div>
+        <div class="k-value" id="tPosts">–</div>
+        <div class="k-sub" id="tPostsSub"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 인스타그램 ================= -->
+  <section class="ch insta">
+    <div class="ch-head">
+      <span class="ch-badge">INSTAGRAM</span>
+      <h2>인스타그램</h2>
+      <span class="acct">@tymtractors_kr</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="k-label">팔로워</div>
+        <div class="k-value" id="iFollow">–</div>
+        <div class="k-sub" id="iFollowSub"></div>
+      </div>
+      <div class="card">
+        <div class="k-label">이달 발행</div>
+        <div class="k-value" id="iPosts">–</div>
+        <div class="k-sub" id="iPostsSub"></div>
+      </div>
+    </div>
+    <div class="card chart-card">
+      <h3>팔로워 추이</h3>
+      <p class="cap">매일 갱신 · 수집 시작일부터 누적</p>
+      <div id="chFollow"></div>
+      <details class="tbl"><summary>표로 보기</summary><div id="tbFollow"></div></details>
+    </div>
+    <div class="two">
+      <div class="sub-sect">
+        <h3>유형별 게시물당 평균 반응</h3>
+        <p class="cap">좋아요+댓글 기준</p>
+        <div class="bars" id="typeBars"></div>
+      </div>
+      <div class="sub-sect">
+        <h3>이달의 베스트</h3>
+        <p class="cap">반응 상위</p>
+        <div class="list" id="bestList"></div>
+      </div>
+    </div>
+    <div class="sub-sect">
+      <h3>최근 발행 게시물</h3>
+      <div class="list" id="iRecent"></div>
+    </div>
+  </section>
+
+  <!-- ================= 네이버 블로그 ================= -->
+  <section class="ch naver">
+    <div class="ch-head">
+      <span class="ch-badge">NAVER</span>
+      <h2>네이버 블로그</h2>
+      <span class="acct">blog.naver.com/tymsns</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="k-label">일 방문자</div>
+        <div class="k-value" id="nVisit">–</div>
+        <div class="k-sub" id="nVisitSub"></div>
+      </div>
+      <div class="card">
+        <div class="k-label">이웃</div>
+        <div class="k-value" id="nSub">–</div>
+        <div class="k-sub"></div>
+      </div>
+      <div class="card">
+        <div class="k-label">이달 발행</div>
+        <div class="k-value" id="nPosts">–</div>
+        <div class="k-sub" id="nPostsSub"></div>
+      </div>
+    </div>
+    <div class="card chart-card">
+      <h3>일 방문자 추이</h3>
+      <div class="legend">
+        <span><i style="background:var(--red)"></i>일 방문자</span>
+        <span><i style="background:var(--blue)"></i>7일 평균</span>
+      </div>
+      <div id="chVisit"></div>
+      <details class="tbl"><summary>표로 보기</summary><div id="tbVisit"></div></details>
+    </div>
+    <div class="sub-sect">
+      <h3>최근 발행 글</h3>
+      <div class="list" id="nRecent"></div>
+    </div>
+  </section>
+
+</div>
+<div class="tip" id="tip"></div>
+
+<script id="embedded-data" type="application/json">
+{
+  "updated": "2026-08-27",
+  "sample": false,
+  "insta": {
+    "followers": [
+      {
+        "d": "2026-08-27",
+        "v": 6129
+      }
+    ],
+    "monthlyPosts": 0,
+    "planPosts": 6,
+    "typeAvg": [
+      {
+        "type": "제품",
+        "avg": 160
+      },
+      {
+        "type": "소식",
+        "avg": 51
+      }
+    ],
+    "best": [
+      {
+        "title": "국내 유일의 88마력 T5088",
+        "reactions": 243
+      },
+      {
+        "title": "밭작물 최적화 트랙터 T4058N",
+        "reactions": 156
+      },
+      {
+        "title": "존디어 5075E",
+        "reactions": 136
+      }
+    ],
+    "recent": [
+      {
+        "d": "2026-05-28",
+        "title": "밭작물 최적화 트랙터 T4058N",
+        "reactions": 156
+      },
+      {
+        "d": "2026-05-22",
+        "title": "존디어 5075E",
+        "reactions": 136
+      },
+      {
+        "d": "2026-05-18",
+        "title": "이앙기 RGO-660",
+        "reactions": 103
+      }
+    ]
+  },
+  "naver": {
+    "visitors": [
+      {
+        "d": "2026-08-27",
+        "v": 21
+      }
+    ],
+    "subscribers": 462,
+    "monthlyPosts": 0,
+    "planPosts": 4,
+    "recent": [
+      {
+        "d": "2026-06-01",
+        "title": "[TYM Q＆A] 이앙기가 안 움직일 때, 먼저 확인해야 할 점검 포인트 5",
+        "reactions": 11
+      },
+      {
+        "d": "2026-05-29",
+        "title": "[TYM Tip톡] 이달의 노동요_5월",
+        "reactions": 7
+      }
+    ]
+  }
+}
+</script>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+
+/* ---------- 접근 코드 게이트 ----------
+   코드 변경: 새 코드를 base64로 인코딩해 아래 값 교체 (예: btoa("새코드")) */
+const ACCESS_CODE_B64 = "dHltMDgyNw==";  // 기본 코드: tym0827 — 반드시 변경할 것
+(function gate(){
+  const ok = () => { $("gate").style.display = "none"; $("app").style.visibility = "visible"; };
+  let saved = null;
+  try { saved = sessionStorage.getItem("tymdash_auth"); } catch(e){}
+  if (saved === ACCESS_CODE_B64) { ok(); return; }
+  $("gate").style.display = "flex";
+  const attempt = () => {
+    let entered = "";
+    try { entered = btoa(unescape(encodeURIComponent($("gCode").value.trim()))); } catch(e){}
+    if (entered === ACCESS_CODE_B64){
+      try { sessionStorage.setItem("tymdash_auth", ACCESS_CODE_B64); } catch(e){}
+      ok();
+    } else {
+      $("gErr").textContent = "코드가 올바르지 않습니다";
+      $("gCode").value = ""; $("gCode").focus();
+    }
+  };
+  $("gBtn").addEventListener("click", attempt);
+  $("gCode").addEventListener("keydown", e => { if (e.key === "Enter") attempt(); });
+})();
+const fmt = n => n.toLocaleString("ko-KR");
+
+function movAvg(arr, w){
+  return arr.map((_, i) => {
+    const s = arr.slice(Math.max(0, i - w + 1), i + 1);
+    return Math.round(s.reduce((a, b) => a + b.v, 0) / s.length);
+  });
+}
+
+function lineChart(el, series){
+  const W = 720, H = 280, PL = 62, PR = 12, PT = 16, PB = 40;
+  const all = series.flatMap(s => s.data.map(p => p.v));
+  let lo = Math.min(...all), hi = Math.max(...all);
+  const pad = Math.max((hi - lo) * 0.12, 1); lo = Math.max(0, lo - pad); hi += pad;
+  if (hi - lo < 4){ const c = (hi + lo) / 2; lo = Math.max(0, Math.floor(c) - 2); hi = Math.floor(c) + 2; }
+  lo = Math.floor(lo); hi = Math.ceil(hi);
+  const n = series[0].data.length;
+  const x = i => PL + (W - PL - PR) * (n === 1 ? 0.5 : i / (n - 1));
+  const y = v => PT + (H - PT - PB) * (1 - (v - lo) / (hi - lo));
+  const ticks = 4;
+  let g = "";
+  for (let t = 0; t <= ticks; t++){
+    const v = lo + (hi - lo) * t / ticks, yy = y(v);
+    g += `<line x1="${PL}" y1="${yy}" x2="${W-PR}" y2="${yy}" stroke="#EEEAE5" stroke-width="1"/>`;
+    g += `<text x="${PL-10}" y="${yy+6}" text-anchor="end" font-size="19" fill="#8B857E">${fmt(Math.round(v))}</text>`;
+  }
+  const step = Math.max(1, Math.round(n / 5));
+  for (let i = 0; i < n; i += step){
+    const d = series[0].data[i].d.slice(5).replace("-", "/");
+    g += `<text x="${x(i)}" y="${H-12}" text-anchor="middle" font-size="19" fill="#8B857E">${d}</text>`;
+  }
+  let paths = "";
+  for (const s of series){
+    const pts = s.data.map((p, i) => `${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(" ");
+    paths += `<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="3.5"
+      ${s.dashed ? 'stroke-dasharray="6 5"' : ""} stroke-linejoin="round" stroke-linecap="round"/>`;
+    const lastI = s.data.length - 1;
+    paths += `<circle cx="${x(lastI)}" cy="${y(s.data[lastI].v)}" r="6" fill="${s.color}" stroke="#fff" stroke-width="2.5"/>`;
+  }
+  const hover = `<line id="xh" x1="0" y1="${PT}" x2="0" y2="${H-PB}" stroke="#C9C2BA" stroke-width="1" style="display:none"/>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${series.map(s=>s.name).join(", ")} 추이">${g}${paths}${hover}</svg>`;
+  const svg = el.querySelector("svg"), xh = el.querySelector("#xh"), tip = $("tip");
+  function show(clientX, clientY){
+    const r = svg.getBoundingClientRect();
+    const vx = (clientX - r.left) / r.width * W;
+    let i = Math.round((vx - PL) / (W - PL - PR) * (n - 1));
+    i = Math.max(0, Math.min(n - 1, i));
+    xh.setAttribute("x1", x(i)); xh.setAttribute("x2", x(i)); xh.style.display = "";
+    const lines = series.map(s => `${s.name} ${fmt(s.data[i].v)}`).join(" · ");
+    tip.textContent = `${series[0].data[i].d.slice(5).replace("-","/")} — ${lines}`;
+    tip.style.opacity = 1;
+    tip.style.left = Math.min(clientX + 12, window.innerWidth - tip.offsetWidth - 8) + "px";
+    tip.style.top = (clientY - 38) + "px";
+  }
+  function hide(){ xh.style.display = "none"; tip.style.opacity = 0; }
+  svg.addEventListener("pointermove", e => show(e.clientX, e.clientY));
+  svg.addEventListener("pointerdown", e => show(e.clientX, e.clientY));
+  svg.addEventListener("pointerleave", hide);
+}
+
+function tableFrom(el, head, rows){
+  el.innerHTML = `<table><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(r=>`<tr>${r.map((c,i)=>`<td class="${i>0?"num":""}">${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+
+function render(data){
+  $("upd").textContent = `기준일 ${data.updated}`;
+  if (data.sample) $("sampleBadge").style.display = "block";
+
+  /* ---- 전체 요약 ---- */
+  const I = data.insta, F = I.followers;
+  const N = data.naver, V = N.visitors;
+  {
+    const fL = F[F.length-1].v;
+    const fD = F.length > 7 ? fL - F[F.length-8].v : null;
+    $("tFollow").textContent = fmt(fL);
+    $("tFollowSub").innerHTML = fD === null ? "" : `최근 7일 <span class="up">${fD>=0?"+":""}${fmt(fD)}명</span>`;
+    const vL = V[V.length-1].v;
+    const vA = Math.round(V.slice(-7).reduce((a,b)=>a+b.v,0) / Math.min(7, V.length));
+    $("tVisit").textContent = fmt(vL);
+    $("tVisitSub").textContent = `최근 7일 평균 ${fmt(vA)}명/일`;
+    $("tPosts").textContent = `${I.monthlyPosts + N.monthlyPosts}건`;
+  }
+
+  /* ---- 인스타그램 ---- */
+  const fLast = F[F.length-1].v;
+  const f7 = F.length > 7 ? fLast - F[F.length-8].v : null;
+  $("iFollow").textContent = fmt(fLast);
+  $("iFollowSub").innerHTML = f7 === null ? "" : `최근 7일 <span class="up">${f7>=0?"+":""}${fmt(f7)}명</span>`;
+  $("iPosts").textContent = `${I.monthlyPosts}건`;
+  lineChart($("chFollow"), [{name:"팔로워", color:"#E60012", data:F.slice(-30)}]);
+  tableFrom($("tbFollow"), ["날짜","팔로워"], F.slice(-14).reverse().map(p=>[p.d, fmt(p.v)]));
+
+  const mx = Math.max(...I.typeAvg.map(t=>t.avg));
+  $("typeBars").innerHTML = I.typeAvg.map(t=>`
+    <div class="bar-row"><span class="nm">${t.type}</span>
+      <span class="tr"><span class="fl" style="width:${Math.round(t.avg/mx*100)}%"></span></span>
+      <span class="vl">${fmt(t.avg)}</span></div>`).join("");
+  $("bestList").innerHTML = I.best.map((b,i)=>`
+    <div class="li"><span class="medal ${i===0?"m1":""}">${i+1}</span>
+      <span class="t">${b.title}</span><span class="v">${fmt(b.reactions)}</span></div>`).join("");
+  $("iRecent").innerHTML = I.recent.map(r=>`
+    <div class="li"><span class="t">${r.title}</span>
+      <span class="d">${r.d.slice(5).replace("-","/")}</span><span class="v">${fmt(r.reactions)}</span></div>`).join("");
+
+  /* ---- 네이버 블로그 ---- */
+  const vLast = V[V.length-1].v;
+  const v7 = Math.round(V.slice(-7).reduce((a,b)=>a+b.v,0) / Math.min(7, V.length));
+  $("nVisit").textContent = fmt(vLast);
+  $("nVisitSub").textContent = `최근 7일 평균 ${fmt(v7)}명/일`;
+  $("nSub").textContent = fmt(N.subscribers);
+  $("nPosts").textContent = `${N.monthlyPosts}건`;
+  const v30 = V.slice(-30);
+  const avg = movAvg(V, 7).slice(-30).map((v,i)=>({d:v30[i].d, v}));
+  lineChart($("chVisit"), [
+    {name:"일 방문자", color:"#E60012", data:v30},
+    {name:"7일 평균", color:"#2F5FA8", data:avg, dashed:true}
+  ]);
+  tableFrom($("tbVisit"), ["날짜","방문자"], V.slice(-14).reverse().map(p=>[p.d, fmt(p.v)]));
+
+  $("nRecent").innerHTML = N.recent.map(r=>`
+    <div class="li"><span class="t">${r.title}</span>
+      <span class="d">${r.d.slice(5).replace("-","/")}</span><span class="v">${fmt(r.reactions)}</span></div>`).join("");
+}
+
+function renderEmbedded(){
+  try { render(JSON.parse($("embedded-data").textContent)); }
+  catch(e){ $("upd").textContent = "데이터를 불러올 수 없습니다."; }
+}
+fetch("data.json", {cache:"no-store"})
+  .then(r => { if(!r.ok) throw 0; return r.json(); })
+  .then(render)
+  .catch(renderEmbedded);
+</script>
+</body>
+</html>
