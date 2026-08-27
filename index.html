@@ -38,7 +38,9 @@ header h1 b{color:var(--red)}
 .ch.insta .ch-badge{background:#FDEBEC; color:var(--red)}
 .ch.naver .ch-badge{background:#E7F7EE; color:#028A40}
 .ch-head h2{margin:0; font-size:16px; font-weight:900; letter-spacing:-.2px}
-.ch-head .acct{margin-left:auto; font-size:11.5px; color:var(--sub)}
+.ch-head .acct{margin-left:auto; font-size:11.5px; color:var(--sub); text-decoration:none;
+  border:1px solid var(--line); border-radius:99px; padding:4px 12px; background:var(--card)}
+.ch-head .acct:active{background:var(--well)}
 .cards{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:13px 15px}
 .k-label{font-size:12px; font-weight:500; color:var(--sub)}
@@ -147,7 +149,7 @@ details.tbl table{font-size:12px}
     <div class="ch-head">
       <span class="ch-badge">INSTAGRAM</span>
       <h2>인스타그램</h2>
-      <span class="acct">@tymtractors_kr</span>
+      <a class="acct" href="https://www.instagram.com/tymtractors_kr/" target="_blank" rel="noopener">@tymtractors_kr ↗</a>
     </div>
     <div class="cards">
       <div class="card">
@@ -190,7 +192,7 @@ details.tbl table{font-size:12px}
     <div class="ch-head">
       <span class="ch-badge">NAVER</span>
       <h2>네이버 블로그</h2>
-      <span class="acct">blog.naver.com/tymsns</span>
+      <a class="acct" href="https://blog.naver.com/tymsns" target="_blank" rel="noopener">blog.naver.com/tymsns ↗</a>
     </div>
     <div class="cards">
       <div class="card">
