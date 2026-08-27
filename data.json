@@ -1,0 +1,78 @@
+{
+  "updated": "2026-08-27",
+  "sample": false,
+  "insta": {
+    "followers": [
+      {
+        "d": "2026-08-27",
+        "v": 6129
+      }
+    ],
+    "monthlyPosts": 0,
+    "planPosts": 6,
+    "typeAvg": [
+      {
+        "type": "제품",
+        "avg": 160
+      },
+      {
+        "type": "소식",
+        "avg": 51
+      }
+    ],
+    "best": [
+      {
+        "title": "국내 유일의 88마력 T5088",
+        "reactions": 243
+      },
+      {
+        "title": "밭작물 최적화 트랙터 T4058N",
+        "reactions": 156
+      },
+      {
+        "title": "존디어 5075E",
+        "reactions": 136
+      }
+    ],
+    "recent": [
+      {
+        "d": "2026-05-28",
+        "title": "밭작물 최적화 트랙터 T4058N",
+        "reactions": 156
+      },
+      {
+        "d": "2026-05-22",
+        "title": "존디어 5075E",
+        "reactions": 136
+      },
+      {
+        "d": "2026-05-18",
+        "title": "이앙기 RGO-660",
+        "reactions": 103
+      }
+    ]
+  },
+  "naver": {
+    "visitors": [
+      {
+        "d": "2026-08-27",
+        "v": 21
+      }
+    ],
+    "subscribers": 462,
+    "monthlyPosts": 0,
+    "planPosts": 4,
+    "recent": [
+      {
+        "d": "2026-06-01",
+        "title": "[TYM Q＆A] 이앙기가 안 움직일 때, 먼저 확인해야 할 점검 포인트 5",
+        "reactions": 11
+      },
+      {
+        "d": "2026-05-29",
+        "title": "[TYM Tip톡] 이달의 노동요_5월",
+        "reactions": 7
+      }
+    ]
+  }
+}
