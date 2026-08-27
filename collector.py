@@ -9,7 +9,7 @@ TYM 채널 성과 대시보드 수집기
 준비물: pip install requests
 설정: 아래 APIFY_TOKEN 만 채우면 됨 (console.apify.com → Settings → API tokens)
 """
-import json, os, sys, datetime, urllib.request
+import json, os, re, sys, datetime, urllib.request
 
 # ================== 설정 ==================
 APIFY_TOKEN = os.environ.get("APIFY_TOKEN", "여기에_APIFY_토큰")
@@ -20,6 +20,9 @@ MAX_POSTS   = 12          # 블로그 최근 글 수집 개수 (비용: 글당 $
 # ==========================================
 
 API = "https://api.apify.com/v2/acts/{actor}/run-sync-get-dataset-items?token={token}&timeout=120"
+
+# 게시물별 정확 지표 액터 (앱 화면과 동일 기준: 답글 포함 댓글 수, 전체 좋아요 수)
+DETAIL_ACTOR = "data-slayer~instagram-post-details"
 
 def run_actor(actor_id, payload):
     url = API.format(actor=actor_id, token=APIFY_TOKEN)
@@ -44,6 +47,38 @@ def upsert_series(series, d, v):
     series.append({"d": d, "v": v})
     series.sort(key=lambda p: p["d"])
     return series
+
+def fetch_insta_details(post_urls):
+    """게시물 URL별 정확한 (좋아요, 댓글) 반환.
+    프로필 스크레이퍼의 요약치는 답글 제외·일부 좋아요 누락으로 앱 화면보다 낮게 나옴.
+    이 액터는 게시물 내부 데이터를 직접 읽어 앱과 같은 값을 줌.
+    실패하면 빈 dict 반환 → 호출부에서 프로필 요약치로 폴백."""
+    if not post_urls:
+        return {}
+    try:
+        items = run_actor(DETAIL_ACTOR, {"postUrls": post_urls})
+        out = {}
+        for it in items:
+            m = it.get("metrics") or {}
+            if it.get("code") and m.get("like_count") is not None:
+                out[it["code"]] = (m.get("like_count") or 0, m.get("comment_count") or 0)
+        return out
+    except Exception as e:
+        print(f"[경고] 게시물 상세 수집 실패 → 프로필 요약치 사용: {e}")
+        return {}
+
+# 제품 모델명 형태의 해시태그 (예: T4058N, 5075E, RGO660, T5088)
+MODEL_RE = re.compile(r"^(?:[A-Z]{1,4}\d{3,4}[A-Z]{0,2}|\d{4}[A-Z])$")
+
+def insta_title(post):
+    """캡션 첫 줄(40자). 게시물 해시태그에 모델명이 있고 첫 줄에 없으면 뒤에 붙임."""
+    first = (post.get("caption") or "").split("\n")[0].strip()[:40] or "(무제)"
+    base = first.upper().replace("-", "")
+    for h in post.get("hashtags") or []:
+        hu = str(h).upper().replace("-", "")
+        if MODEL_RE.match(hu) and hu not in base:
+            return f"{first} · {h}"
+    return first
 
 def classify_insta(caption):
     c = (caption or "")
@@ -72,11 +107,15 @@ def main():
     insta = data.setdefault("insta", {})
     insta["followers"] = upsert_series(insta.get("followers", []), d, p["followersCount"])
 
+    details = fetch_insta_details([x.get("url") for x in posts if x.get("url")])
+
     reacted = []
     for post in posts:
         likes = post.get("likesCount") or 0
         com = post.get("commentsCount") or 0
-        title = (post.get("caption") or "").split("\n")[0][:40] or "(무제)"
+        if post.get("shortCode") in details:      # 정확값으로 교체
+            likes, com = details[post["shortCode"]]
+        title = insta_title(post)
         reacted.append({
             "d": (post.get("timestamp") or "")[:10],
             "title": title,
