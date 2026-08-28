@@ -363,9 +363,15 @@ function lineChart(el, series){
     g += `<text x="${PL-10}" y="${yy+6}" text-anchor="end" font-size="19" fill="#8B857E">${fmt(Math.round(v))}</text>`;
   }
   const step = Math.max(1, Math.round(n / 5));
-  for (let i = 0; i < n; i += step){
+  const idxs = [];
+  for (let i = 0; i < n; i += step) idxs.push(i);
+  if (idxs[idxs.length-1] !== n-1){
+    if (n-1 - idxs[idxs.length-1] < step/2) idxs[idxs.length-1] = n-1; else idxs.push(n-1);
+  }
+  for (const i of idxs){
     const d = series[0].data[i].d.slice(5).replace("-", "/");
-    g += `<text x="${x(i)}" y="${H-12}" text-anchor="middle" font-size="19" fill="#8B857E">${d}</text>`;
+    const end = (i === n-1 && n > 1);   // 마지막 라벨은 오른쪽 끝에서 잘리지 않게 끝 정렬
+    g += `<text x="${end ? x(i)+8 : x(i)}" y="${H-12}" text-anchor="${end ? "end" : "middle"}" font-size="19" fill="#8B857E">${d}</text>`;
   }
   let paths = "";
   for (const s of series){
